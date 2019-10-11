@@ -1,0 +1,5 @@
+clean_dataset.csv is used to create the PowerBI
+
+data.csv is the main dataset that was given.
+
+old_data.csv is the dataset that was given in the first time, but it was not good enough.

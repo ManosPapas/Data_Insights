@@ -1,0 +1,87 @@
+Public Function calculate_contract(start_date As Date, end_date As Date, contracts As Range, rates_1 As Range, rates_2 As Range, rates_3 As Range) As Double
+'   Initial Values
+    Dim rate As Double
+    Dim counter, emptyValues_1, emptyValues_2, emptyValues_3 As Integer
+    
+'   Find date difference between dates, in years
+    date_diff = DateDiff("y", start_date, end_date)
+    date_diff = Int(date_diff / 365)
+    
+    counter = 1
+    emptyValues_1 = 0
+    emptyValues_2 = 0
+    emptyValues_3 = 0
+    
+'    Find how many times it needs to shift to find the right value for each rate.
+     If (rates_1(6) <= 0) Then
+        emptyValues_1 = 6
+    ElseIf (rates_1(5) <= 0) Then
+        emptyValues_1 = 5
+    ElseIf (rates_1(4) <= 0) Then
+        emptyValues_1 = 4
+    ElseIf (rates_1(3) <= 0) Then
+        emptyValues_1 = 3
+    ElseIf (rates_1(2) <= 0) Then
+        emptyValues_1 = 2
+    ElseIf (rates_1(1) <= 0) Then
+        emptyValues_1 = 1
+    End If
+    
+    If (rates_2(6) <= 0) Then
+        emptyValues_2 = 6
+    ElseIf (rates_2(5) <= 0) Then
+        emptyValues_2 = 5
+    ElseIf (rates_2(4) <= 0) Then
+        emptyValues_2 = 4
+    ElseIf (rates_2(3) <= 0) Then
+        emptyValues_2 = 3
+    ElseIf (rates_2(2) <= 0) Then
+        emptyValues_2 = 2
+    ElseIf (rates_2(1) <= 0) Then
+        emptyValues_2 = 1
+    End If
+    
+    If (rates_3(6) <= 0) Then
+        emptyValues_3 = 6
+    ElseIf (rates_3(5) <= 0) Then
+        emptyValues_3 = 5
+    ElseIf (rates_3(4) <= 0) Then
+        emptyValues_3 = 4
+    ElseIf (rates_3(3) <= 0) Then
+        emptyValues_3 = 3
+    ElseIf (rates_3(2) <= 0) Then
+        emptyValues_3 = 2
+    ElseIf (rates_3(1) <= 0) Then
+        emptyValues_3 = 1
+    End If
+    
+    For Each contract In contracts
+        rate = 0
+        If (contract > 0) Then
+'           If the end_date is NOT less than the start_date, take a rate otherwise 0
+            If (date_diff >= 0) Then
+                If counter = 1 Then
+                    rate = rates_1(date_diff + emptyValues_1 + 1)
+                    If emptyValues_1 = 6 Then
+                        rate = 0
+                    End If
+                ElseIf counter = 2 Then
+                    rate = rates_2(date_diff + emptyValues_2 + 1)
+                    If emptyValues_2 = 6 Then
+                        rate = 0
+                    End If
+                ElseIf counter = 3 Then
+                    rate = rates_3(date_diff + emptyValues_3 + 1)
+                    If emptyValues_3 = 6 Then
+                        rate = 0
+                    End If
+                End If
+            End If
+
+'           Calculate the value
+            calculate_contract = calculate_contract + (rate * contract / 12)
+        End If
+        counter = counter + 1
+    Next contract
+    
+End Function
